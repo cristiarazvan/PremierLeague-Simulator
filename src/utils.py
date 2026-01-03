@@ -50,6 +50,45 @@ def calculate_player_metrics(row):
 
     return skill_def, skill_att, skill_gk
 
+def calculate_scaling_factor_and_avg_goals(league, params):
+    # print("--- CALIBRARE AUTOMATA SCALING FACTOR ---")
+    max_attack_power = 0
+    min_defense_power = 9999999
+
+    # Iteram prin toate echipele incarcate
+    for team in league.teams:
+        att, def_ = league.teams[team].calculate_power(params)
+
+        if att > max_attack_power:
+            max_attack_power = att
+        if def_ < min_defense_power:
+            min_defense_power = def_
+
+    delta_max_skill = max_attack_power - min_defense_power
+    # print(f"1. Delta Skill Maxim (FIFA): {delta_max_skill:.2f} puncte")
+
+    # PASUL 2: Analiza Istoricului (Realitate)
+    # Aici ar trebui sa citesti din CSV.
+    # Daca nu ai CSV-ul incarcat acum, punem valorile reale din Premier League 23/24.
+
+
+    avg_league_goals = 0
+    best_team = ""
+    best_team_score = 0
+    avg_best_team_goals = 0
+    for team in league.teams:
+        avg_league_goals += league.teams[team].goals_per_match
+        if league.teams[team].points > best_team_score:
+            best_team = team
+            best_team_score = league.teams[team].points
+    avg_league_goals /= len(league.teams)
+    avg_best_team_goals = league.teams[best_team].goals_per_match
+
+    ratio = avg_best_team_goals / avg_league_goals
+    log_ratio = np.log(ratio)
+    calculated_factor = delta_max_skill / log_ratio
+
+    return calculated_factor, avg_league_goals
 
 def compute_error(predicted_scores, actual_scores):
     mse = 0.0
@@ -58,7 +97,5 @@ def compute_error(predicted_scores, actual_scores):
         pred_points = predicted_scores[i]['Points']
         actual_points = actual_scores[i]['Points']
         mse += (pred_points - actual_points) ** 2
-
-    
 
     return mse

@@ -16,7 +16,9 @@ class Player:
 class Team:
     def __init__(self, name):
         self.name = name
-        self.squad_pool = {} # Dict with players by name 
+        self.squad_pool = {} # Dict with players by name
+        self.points = 0
+        self.goals_per_match = 0
         
     def add_player(self, player):
         self.squad_pool[player.name] = player
