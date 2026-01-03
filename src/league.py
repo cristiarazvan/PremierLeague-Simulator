@@ -3,7 +3,20 @@ from src.models import Team, Player
 
 class League:
     def __init__(self, players_list):
-        self.teams = {} 
+        self.teams = {}
+        self.params = {
+                        'sigma': 0.15,  # 15% variability (luck/form)
+                        'scaling_factor': 1500,  # Normalize power difference
+                        'league_avg_goals': 1.6,
+                        'home_adv': 1.0,
+                        'weights' : {
+                                    'ATT': {'att': 1.0, 'def': 0.15},
+                                    'MID': {'att': 0.7, 'def': 0.6},
+                                    'DEF': {'att': 0.1, 'def': 1.0},
+                                    'GK':  {'att': 0.0, 'def': 0.0},
+                                    'UNK': {'att': 0.5, 'def': 0.5}
+                                }
+                    }
         self._build_teams(players_list)
         
         self.avg_att_power = 0
@@ -24,7 +37,7 @@ class League:
         all_def = []
         
         for t in self.teams.values():
-            a, d = t.calculate_power(specific_lineup_names=None) # Default 11
+            a, d = t.calculate_power(self.params, specific_lineup_names=None) # Default 11
             all_att.append(a)
             all_def.append(d)
             
@@ -33,7 +46,7 @@ class League:
         
         print(f"League Calibrated. Avg Att: {self.avg_att_power:.1f}, Avg Def: {self.avg_def_power:.1f}")
 
-    def predict_match(self, home_name, away_name, home_lineup=None, away_lineup=None):
+    def predict_match(self, home_name, away_name, params, home_lineup=None, away_lineup=None):
         """
         Return the expected goals (lambda) for home and away teams.
         """
@@ -44,8 +57,8 @@ class League:
         home_team = self.teams[home_name]
         away_team = self.teams[away_name]
 
-        h_att, h_def = home_team.calculate_power(home_lineup)
-        a_att, a_def = away_team.calculate_power(away_lineup)
+        h_att, h_def = home_team.calculate_power(params, home_lineup)
+        a_att, a_def = away_team.calculate_power(params, away_lineup)
 
         # Comparing to league average 
         h_att_ratio = h_att / self.avg_att_power 
@@ -74,8 +87,8 @@ class League:
         away_team = self.teams[away_name]
 
         # 1. Base Power
-        attack_home, defense_home = home_team.calculate_power(home_lineup)
-        attack_away, defense_away = away_team.calculate_power(away_lineup)
+        attack_home, defense_home = home_team.calculate_power(params, home_lineup)
+        attack_away, defense_away = away_team.calculate_power(params, away_lineup)
 
         # 2. White Noise (Luck/Form on the day)
         sigma = params.get('sigma', 0.1)

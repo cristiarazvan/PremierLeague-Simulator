@@ -35,7 +35,7 @@ class Team:
         
         return top_gk + top_10
 
-    def calculate_power(self, specific_lineup_names=None):
+    def calculate_power(self, params, specific_lineup_names=None):
         """
         specific_lineup_names: List of player names to use as lineup.
 
@@ -57,13 +57,7 @@ class Team:
         total_def = 0.0
         has_gk = False
 
-        weights = {
-            'ATT': {'att': 1.0, 'def': 0.15},
-            'MID': {'att': 0.7, 'def': 0.6},
-            'DEF': {'att': 0.1, 'def': 1.0},
-            'GK':  {'att': 0.0, 'def': 0.0},
-            'UNK': {'att': 0.5, 'def': 0.5}
-        }
+        weights = params["weights"]
 
         for p in active_players:
             w = weights.get(p.position, weights['UNK'])
