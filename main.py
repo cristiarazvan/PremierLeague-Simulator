@@ -1,5 +1,4 @@
-from src import league
-from src.data_loader import load_players_from_csv
+from src.data_loader import load_players_from_csv, load_teams_from_csv
 from src.league import League
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -7,6 +6,7 @@ import seaborn as sns
 
 # Config
 PLAYER_CSV = 'data/raw/player_stats_2024-25.csv'
+TEAM_CSV = 'data/raw/team_stats_2024-25.csv'
 
 # Simulated Parameters - HARDCODED fot now
 sim_params = {
@@ -117,6 +117,7 @@ def Monte_Carlo_League(league, sim_params, lineups = None):
 def main():
     print("--- 1. Loading Data ---")
     all_players = load_players_from_csv(PLAYER_CSV)
+    all_teams = load_teams_from_csv(TEAM_CSV)
     
     if not all_players:
         print("No players loaded. Exiting.")

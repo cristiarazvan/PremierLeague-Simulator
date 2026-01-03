@@ -49,3 +49,16 @@ def calculate_player_metrics(row):
         skill_gk = np.random.uniform(0, 0.1)
 
     return skill_def, skill_att, skill_gk
+
+
+def compute_error(predicted_scores, actual_scores):
+    mse = 0.0
+    n = len(predicted_scores)
+    for i in range(n):
+        pred_points = predicted_scores[i]['Points']
+        actual_points = actual_scores[i]['Points']
+        mse += (pred_points - actual_points) ** 2
+
+    
+
+    return mse

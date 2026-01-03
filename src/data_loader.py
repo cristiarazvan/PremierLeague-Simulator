@@ -14,3 +14,14 @@ def load_players_from_csv(filepath):
     except Exception as e:
         print(f"Error loading CSV: {e}")
         return []
+
+def load_teams_from_csv(filepath):
+    try:
+        df = pd.read_csv(filepath)
+        df.fillna(0, inplace=True)
+        
+        teams = df['Squad'].unique().tolist()
+        return teams
+    except Exception as e:
+        print(f"Error loading CSV: {e}")
+        return []
