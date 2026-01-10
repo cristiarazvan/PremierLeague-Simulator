@@ -86,7 +86,6 @@ When simulating a specific match, you can generate a convergence plot to see how
 ```
 ├── main.py                 # Core script (CLI entry point)
 ├── interactive_session.py  # Advanced CLI with Visualizations
-├── convergence_check.py    # Math proof script (generates plots)
 ├── plots/                  # Generated images directory
 ├── data/
 │   └── raw/                # CSV Stats from FBref
@@ -100,7 +99,7 @@ When simulating a specific match, you can generate a convergence plot to see how
 
 ## 🚀 How to Use
 
-### 1. Interactive Mode (Recommended)
+### Interactive Mode (Recommended)
 This is the primary way to interact with the project.
 ```bash
 python interactive_session.py
@@ -108,12 +107,6 @@ python interactive_session.py
 *   **Simulate League:** Runs 10k seasons. Wait for it to finish (~20-30s), then choose "Show Position Heatmap" to see the full probability spread.
 *   **Simulate Match:** Choose "Simulate Single Match", enter two teams, and then press 'V' to see the Monte Carlo convergence graph.
 *   **Manage Teams:** Edit starting lineups to see how benching a star player affects the odds.
-
-### 2. Run Convergence Analysis
-To generate the convergence plot for your report without the CLI menu:
-```bash
-python convergence_check.py
-```
 
 ## 📚 References
 1.  **FBref:** Source of raw player and team statistics.

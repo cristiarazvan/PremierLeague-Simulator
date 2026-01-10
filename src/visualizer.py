@@ -114,6 +114,7 @@ def plot_convergence(h_history, d_history, a_history, h_name, a_name, filename=N
     plt.tight_layout(rect=[0, 0.03, 1, 0.95]) # Make room for suptitle
     
     save_path = os.path.join('plots', filename)
+    save_path = "".join(save_path.split())
     plt.savefig(save_path)
     print(f"Convergence plot saved to {save_path}")
     plt.show()
