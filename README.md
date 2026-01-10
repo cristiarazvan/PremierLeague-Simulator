@@ -11,7 +11,7 @@ We aim to estimate the probability distribution of the final league standings an
 ### 2. Monte Carlo Algorithm
 The simulation follows these steps:
 1.  **Model Calibration:** Convert raw player stats into "Attack" and "Defense" power ratings for each team.
-2.  **Noise Injection:** For every match simulation, we introduce random Gaussian noise ($\mathcal{N}(0, \sigma)$) to team powers to simulate form/luck fluctuations.
+2.  **Noise Injection:** For every match simulation, we introduce random Gaussian noise $\mathcal{N}(0, \sigma)$ to team powers to simulate form/luck fluctuations.
 3.  **Poisson Sampling:** Goals are generated using $Goals \sim \text{Poisson}(\lambda_{adjusted})$.
 4.  **Aggregation:** We repeat this process $N$ times. By the Law of Large Numbers (LLN), the average of these simulations converges to the theoretical expected probability of each outcome.
 
@@ -21,7 +21,7 @@ The simulation follows these steps:
 
 ### Why 10,000 Simulations?
 
-We need to determine the number of simulations $N$ required to achieve a **95% Confidence Level** with a **Margin of Error $$(\epsilon)$$ of $\approx 1%$**.
+We need to determine the number of simulations $N$ required to achieve a **95% Confidence Level** with a **Margin of Error $\epsilon$ of $\approx 1%$**.
 
 We rely on the **Central Limit Theorem (CLT)**. The CLT states that the distribution of sample means approximates a normal distribution as the sample size becomes larger.
 
