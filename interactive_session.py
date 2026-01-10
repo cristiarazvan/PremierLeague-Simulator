@@ -259,8 +259,15 @@ class PremierLeagueCLI:
             print("Reset to default.")
         
         elif opt == 'S':
-            idx = int(input("Enter number of player to remove (1-11): ")) - 1
-            if idx < 0 or idx > 10: return
+            try:
+                idx_input = input("Enter number of player to remove (1-11): ")
+                idx = int(idx_input) - 1
+                if idx < 0 or idx > 10:
+                    print("Invalid index. Please enter a number between 1 and 11.")
+                    return
+            except ValueError:
+                print("Invalid input. Please enter a numeric value.")
+                return
 
             player_out = current_lineup[idx]
             print(f"Removing {player_out.name}...")
@@ -275,7 +282,16 @@ class PremierLeagueCLI:
             for i, p in enumerate(bench[:10]):
                 print(f"{i+1}. {p.name} ({p.position})")
             
-            b_idx = int(input("Enter number of player to bring in: ")) - 1
+            try:
+                b_idx_input = input("Enter number of player to bring in: ")
+                b_idx = int(b_idx_input) - 1
+                if b_idx < 0 or b_idx >= len(bench):
+                    print("Invalid selection.")
+                    return
+            except ValueError:
+                print("Invalid input.")
+                return
+
             player_in = bench[b_idx]
 
             # Update Lineup
@@ -311,10 +327,14 @@ class PremierLeagueCLI:
                 print(f"{i+1}. {p.name} ({p.squad_name} - {p.position})")
             
             sel = input("Select # to add (or 0 to skip): ")
-            if sel.isdigit() and int(sel) > 0 and int(sel) <= len(matches):
-                p_obj = matches[int(sel)-1]
-                new_team.add_player(p_obj)
-                print(f"Added {p_obj.name}.")
+            try:
+                sel_idx = int(sel)
+                if sel_idx > 0 and sel_idx <= len(matches):
+                    p_obj = matches[sel_idx-1]
+                    new_team.add_player(p_obj)
+                    print(f"Added {p_obj.name}.")
+            except ValueError:
+                print("Invalid input. Skipping.")
             
         if len(new_team.squad_pool) < 11:
             print("Warning: Team has fewer than 11 players. Simulation might crash or be weird.")
