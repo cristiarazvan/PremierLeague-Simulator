@@ -4,6 +4,7 @@ import pandas as pd
 from src.data_loader import load_players_from_csv, load_teams_from_csv
 from src.league import League
 from src.models import Team
+from src.visualizer import plot_league_heatmap, plot_points_distribution, plot_convergence
 
 # Config
 PLAYER_CSV = 'data/raw/player_stats_2024-25.csv'
@@ -87,17 +88,39 @@ class PremierLeagueCLI:
 
         wins_h, wins_a, draws = 0, 0, 0
         num_sims = 10000
+        
+        # Track history for convergence plotting (3 separate lists)
+        h_hist = []
+        d_hist = []
+        a_hist = []
 
         for _ in range(num_sims):
             gh, ga = self.league.simulate_match_fast(h_att, h_def, a_att, a_def, SIM_PARAMS)
-            if gh > ga: wins_h += 1
-            elif ga > gh: wins_a += 1
-            else: draws += 1
+            if gh > ga: 
+                wins_h += 1
+                h_hist.append(1); d_hist.append(0); a_hist.append(0)
+            elif ga > gh: 
+                wins_a += 1
+                h_hist.append(0); d_hist.append(0); a_hist.append(1)
+            else: 
+                draws += 1
+                h_hist.append(0); d_hist.append(1); a_hist.append(0)
 
         print(f"\nResults ({num_sims} runs):")
         print(f"{h_team}: {wins_h/num_sims*100:.1f}%")
         print(f"Draw:      {draws/num_sims*100:.1f}%")
         print(f"{a_team}: {wins_a/num_sims*100:.1f}%")
+        
+        # Option to visualize convergence
+        print("\n[Options]")
+        print("V. Visualize Convergence (Generate Graph)")
+        print("B. Back to Menu")
+        choice = input("Select: ").upper()
+        
+        if choice == 'V':
+            print("Generating Convergence Plot...")
+            plot_convergence(h_hist, d_hist, a_hist, h_team, a_team)
+            # No need to break or exit, plot_convergence shows plot then returns
 
     def menu_league_sim(self):
         print("\n--- League Simulation ---")
@@ -110,9 +133,12 @@ class PremierLeagueCLI:
             team_powers[name] = team.calculate_power(SIM_PARAMS, lineup_names)
 
         # Storage for results
-        table = {name: {'Points': 0, 'GF': 0, 'GA': 0} for name in self.league.teams}
+        rankings_data = {name: {} for name in self.league.teams} # Team -> {Pos: Count}
+        points_history = {name: [] for name in self.league.teams} # Team -> [Points list]
         
-        num_sims = 10000 # Keeping it snappy
+        table_totals = {name: {'Points': 0, 'GF': 0} for name in self.league.teams}
+        
+        num_sims = 10000
         print(f"Running {num_sims} simulations of the entire season...")
 
         for _ in range(num_sims):
@@ -150,25 +176,54 @@ class PremierLeagueCLI:
                         season_points[t2] += 1
                         season_points[t1] += 1
             
-            # Accumulate average stats
-            for t in self.league.teams:
-                table[t]['Points'] += season_points[t]
-                table[t]['GF'] += season_gf[t]
+            # Record season results
+            sorted_table = sorted(season_points.items(), key=lambda x: (x[1], season_gf[x[0]]), reverse=True)
+            
+            for rank, (team_name, pts) in enumerate(sorted_table):
+                pos = rank + 1
+                # Update Rankings Hist
+                rankings_data[team_name][pos] = rankings_data[team_name].get(pos, 0) + 1
+                # Update Points Hist
+                points_history[team_name].append(pts)
+                
+                # Totals for Average Table
+                table_totals[team_name]['Points'] += pts
+                table_totals[team_name]['GF'] += season_gf[team_name]
 
         # Average out
         results = []
-        for t in table:
-            avg_pts = table[t]['Points'] / num_sims
-            avg_gf = table[t]['GF'] / num_sims
+        for t in table_totals:
+            avg_pts = table_totals[t]['Points'] / num_sims
+            avg_gf = table_totals[t]['GF'] / num_sims
             results.append({'Team': t, 'Avg Pts': avg_pts, 'Avg GF': avg_gf})
 
         # Sort by Points then GF
         results.sort(key=lambda x: (x['Avg Pts'], x['Avg GF']), reverse=True)
 
-        print(f"{ 'Pos':<4} {'Team':<25} {'Pts':<6} {'GF':<6}")
+        print(f"\n{'Pos':<4} {'Team':<25} {'Pts':<6} {'GF':<6}")
         print("-" * 45)
         for i, res in enumerate(results):
             print(f"{i+1:<4} {res['Team']:<25} {res['Avg Pts']:.1f}   {res['Avg GF']:.1f}")
+            
+        # Visualisation Menu
+        while True:
+            print("\n[Visualisation Options]")
+            print("1. Show Position Heatmap (All Teams)")
+            print("2. Show Points Distribution (Specific Team)")
+            print("3. Return to Main Menu")
+            v_choice = input("Select: ")
+            
+            if v_choice == '1':
+                print("Generating Heatmap...")
+                plot_league_heatmap(rankings_data, self.league.teams.keys())
+            elif v_choice == '2':
+                t_input = input("Enter Team Name: ")
+                if t_input in self.league.teams:
+                    plot_points_distribution(points_history[t_input], t_input)
+                else:
+                    print("Team not found.")
+            elif v_choice == '3':
+                break
 
     def menu_manage_team(self):
         print("\n--- Team Manager ---")
