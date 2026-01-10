@@ -14,22 +14,25 @@ We chose to simulate the Premier League for three key reasons, aligning with the
 ## 📌 Project Overview & Methodology
 
 ### 1. The Monte Carlo Approach
-Our simulation treats every match as an experiment with random variables. By repeating the entire season ($380 \text{ matches}$) $N=10,000$ times, we generate a distribution of possible outcomes.
+Our simulation treats every match as an experiment with random variables. By repeating the entire season (380 matches) $N=10,000$ times, we generate a distribution of possible outcomes.
 
 ### 2. From Data to Match Simulation
 The core logic transforms static CSV data into dynamic match scores through the following pipeline:
 
 #### Step A: Calculating "Moment Power"
 In any given match, a team performs slightly differently than their theoretical average. We model this by injecting **Gaussian Noise** into their base power ratings.
-$$ Att_{match} = Att_{base} \cdot (1 + \mathcal{N}(0, \sigma)) $$
-$$ Def_{match} = Def_{base} \cdot (1 + \mathcal{N}(0, \sigma)) $$
+
+$$Att_{match} = Att_{base} \cdot (1 + \mathcal{N}(0, \sigma))$$
+
+$$Def_{match} = Def_{base} \cdot (1 + \mathcal{N}(0, \sigma))$$
+
 *   $\sigma$ (Sigma) is a trained parameter representing the team's volatility (consistency).
 
 #### Step B: The Scoring Model (Poisson Process)
 We model goal-scoring as a **Poisson Process**, which is the standard statistical approach for counting rare events over a fixed time.
 The expected number of goals ($\lambda$) for the Home Team is calculated as:
 
-$$ \lambda_{home} = \text{AvgGoals} \times \exp\left( \frac{Att_{home} - Def_{away}}{S} \right) \times \text{HomeAdv} $$
+$$\lambda_{home} = AvgGoals \times \exp\left( \frac{Att_{home} - Def_{away}}{S} \right) \times HomeAdv$$
 
 **Why this formula?**
 1.  **Baseline:** If $Att_{home} \approx Def_{away}$, the exponent becomes 0, $\exp(0)=1$, and the team scores the league average ($\approx 1.6$).
@@ -38,8 +41,10 @@ $$ \lambda_{home} = \text{AvgGoals} \times \exp\left( \frac{Att_{home} - Def_{aw
 
 #### Step C: Generating the Score
 Finally, we sample the actual goals from the Poisson distribution:
-$$ \text{Goals}_{Home} \sim \text{Poisson}(\lambda_{home}) $$
-$$ \text{Goals}_{Away} \sim \text{Poisson}(\lambda_{away}) $$
+
+$$Goals_{Home} \sim Poisson(\lambda_{home})$$
+
+$$Goals_{Away} \sim Poisson(\lambda_{away})$$
 
 ---
 
@@ -52,12 +57,15 @@ We process every player in the dataset, calculating two key metrics based on wei
 
 **A. Attacking Score:**
 We don't just count Goals. We prioritize underlying metrics that predict future performance:
-$$ S_{att} = (Gls \cdot w_{gls}) + (Ast \cdot w_{ast}) + (xG \cdot w_{xg}) + (xAG \cdot w_{xag}) + (Prog \cdot w_{prg}) $$
+
+$$S_{att} = (Gls \cdot w_{gls}) + (Ast \cdot w_{ast}) + (xG \cdot w_{xg}) + (xAG \cdot w_{xag}) + (Prog \cdot w_{prg})$$
+
 *   **$w_{xg}$ vs $w_{gls}$:** Our training typically finds that $xG$ (Expected Goals) has a higher weight than raw Goals, as it is a better measure of quality chances created, removing "lucky" finishes from the equation.
 
 **B. Defensive Score:**
 Defensive stats are harder to quantify. We use a combination of starts and minutes played as a proxy for a player's defensive reliability and importance to the squad structure.
-$$ S_{def} = (Starts \cdot 2) + \frac{Minutes}{45} $$
+
+$$S_{def} = (Starts \cdot 2) + \frac{Minutes}{45}$$
 
 **C. The Goalkeeper:**
 Goalkeepers are treated uniquely. Their contribution is weighted solely on their presence (Starts/Minutes) but scaled significantly higher in the Team Power calculation because a team without a goalkeeper would concede infinite goals.
@@ -69,47 +77,58 @@ A team isn't just a sum of numbers. A Striker contributes 100% to Attack but lit
 *   $w_{def\_att}$: How much a Defender contributes to Attack.
 
 **Total Team Power Formula:**
-$$ Power_{Team} = \sum_{p \in Lineup} (S_{p} \times PositionWeight_{p}) $$
+
+$$Power_{Team} = \sum_{p \in Lineup} (S_{p} \times PositionWeight_{p})$$
 
 ---
 
-## 📐 Mathematical Proof: Determining $N$
+## 📐 Mathematical Proof: Determining N
 
-We must define the number of simulations $N$ required to trust our results. Our goal is to estimate an unknown probability $p$ (e.g., "Probability that Man City wins the league") with a **95% Confidence Level** and a **Margin of Error ($\epsilon$) of $\approx 1$%**.
+We must define the number of simulations $N$ required to trust our results. Our goal is to estimate an unknown probability $p$ (e.g., "Probability that Man City wins the league") with a **95% Confidence Level** and a **Margin of Error** ( $\epsilon$ ) **of approximately 1%**.
 
 ### Step 1: The Estimator
 We model the outcome of each simulation $i$ as a Bernoulli random variable $X_i$, where $X_i=1$ if the event occurs (e.g., Team Wins) and $X_i=0$ otherwise.
 The true probability is $p = E[X_i]$.
 Our estimator is the sample mean $\hat{p}$:
-$$ \hat{p} = \frac{1}{N} \sum_{i=1}^{N} X_i $$
+
+$$\hat{p} = \frac{1}{N} \sum_{i=1}^{N} X_i$$
 
 ### Step 2: The Variance
 The variance of a single Bernoulli trial is:
-$$ \sigma^2 = p(1-p) $$
+
+$$\sigma^2 = p(1-p)$$
 
 ### Step 3: Application of Central Limit Theorem (CLT)
 The Central Limit Theorem states that for a sufficiently large $N$, the distribution of the sample mean $\hat{p}$ approximates a Normal Distribution:
-$$ \hat{p} \sim \mathcal{N}\left(p, \frac{p(1-p)}{N}\right) $$
+
+$$\hat{p} \sim \mathcal{N}\left(p, \frac{p(1-p)}{N}\right)$$
 
 ### Step 4: Confidence Interval Derivation
 We seek a confidence interval such that:
-$$ P( | \hat{p} - p | \leq \epsilon ) = 1 - \alpha $$
-For a 95% confidence level, $\alpha = 0.05$. This corresponds to a critical Z-score ($Z_{\alpha/2}$) of approximately **1.96**.
+
+$$P( | \hat{p} - p | \leq \epsilon ) = 1 - \alpha$$
+
+For a 95% confidence level, $\alpha = 0.05$. This corresponds to a critical Z-score ( $Z_{\alpha/2}$ ) of approximately **1.96**.
 The margin of error $\epsilon$ is therefore:
-$$ \epsilon = Z_{\alpha/2} \cdot \sigma_{\hat{p}} = 1.96 \cdot \sqrt{\frac{p(1-p)}{N}} $$
+
+$$\epsilon = Z_{\alpha/2} \cdot \sigma_{\hat{p}} = 1.96 \cdot \sqrt{\frac{p(1-p)}{N}}$$
 
 ### Step 5: Solving for N (Worst Case Scenario)
 We do not know the true probability $p$ beforehand. To guarantee the error margin holds for *any* outcome, we must assume the **worst-case variance**.
 The term $p(1-p)$ is maximized when $p = 0.5$ (maximum uncertainty).
-$$ \max(p(1-p)) = 0.5 \cdot 0.5 = 0.25 $$
+
+$$\max(p(1-p)) = 0.5 \cdot 0.5 = 0.25$$
 
 So the inequality becomes:
-$$ \epsilon \ge 1.96 \cdot \sqrt{\frac{0.25}{N}} $$
-$$ \sqrt{N} \ge \frac{1.96 \cdot 0.5}{\epsilon} = \frac{0.98}{\epsilon} = \frac{0.98}{0.01} = 98 $$
-$$ N \ge 98^2 = 9604 $$
+
+$$\epsilon \ge 1.96 \cdot \sqrt{\frac{0.25}{N}}$$
+
+$$\sqrt{N} \ge \frac{1.96 \cdot 0.5}{\epsilon} = \frac{0.98}{\epsilon} = \frac{0.98}{0.01} = 98$$
+
+$$N \ge 98^2 = 9604$$
 
 ### Conclusion
-We require theoretically **9,604 simulations** to ensure a $\leq 1\%$ margin of error. In our project, we round this up to **$N=10,000$** for robustness.
+We require theoretically **9,604 simulations** to ensure a ≤1% margin of error. In our project, we round this up to **N=10,000** for robustness.
 
 ---
 
@@ -154,11 +173,11 @@ This project is modular, separating data, logic, and visualization.
 ### `src/visualizer.py`
 *   Uses `matplotlib` and `seaborn` to generate professional plots.
 *   **`plot_convergence`:** Visualizes the Law of Large Numbers by plotting the running average of probabilities.
-*   **`plot_league_heatmap`:** Creates the $20 \times 20$ grid showing the probability of every position for every team.
+*   **`plot_league_heatmap`:** Creates the 20×20 grid showing the probability of every position for every team.
 
 ### `hyperparameter_search.py`
 *   **Purpose:** The "AI" component. It uses **Random Search** across a defined hyperparameter space.
-*   **Parallelism:** Uses Python's `multiprocessing` to run hundreds of seasons in parallel on all CPU cores to find the optimal weights ($w_{xg}$, $S$, $\sigma$) that minimize error against the Ground Truth table.
+*   **Parallelism:** Uses Python's `multiprocessing` to run hundreds of seasons in parallel on all CPU cores to find the optimal weights ( $w_{xg}$, $S$, $\sigma$ ) that minimize error against the Ground Truth table.
 
 ---
 
@@ -193,5 +212,5 @@ The primary interface for users.
 
 ## 📚 References
 1.  **FBref.com:** Source of the 2024-25 Premier League player statistics.
-2.  **Central Limit Theorem:** Mathematical foundation for determining $N$.
+2.  **Central Limit Theorem:** Mathematical foundation for determining N.
 3.  **Poisson Distribution:** The statistical standard for modeling low-scoring event frequencies (goals).
