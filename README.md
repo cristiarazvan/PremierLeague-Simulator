@@ -21,7 +21,7 @@ The simulation follows these steps:
 
 ### Why 10,000 Simulations?
 
-We need to determine the number of simulations $N$ required to achieve a **95% Confidence Level** with a **Margin of Error (\epsilon) of $\approx 1%$**.
+We need to determine the number of simulations $N$ required to achieve a **95% Confidence Level** with a **Margin of Error $$(\epsilon)$$ of $\approx 1%$**.
 
 We rely on the **Central Limit Theorem (CLT)**. The CLT states that the distribution of sample means approximates a normal distribution as the sample size becomes larger.
 
@@ -48,7 +48,7 @@ $$ N \geq \left( \frac{0.98}{0.01} \right)^2 = (98)^2 = 9604 $$
 
 ### Implementation
 We have set our simulation count to:
-$$ N = 10,000 $$
+$N = 10,000$
 
 Recalculating the precise error for $N=10,000$:
 
@@ -62,7 +62,7 @@ This rigorous approach ensures that the "League Heatmaps" and "Win Probabilities
 
 We have implemented two specific scripts to visualize the data and prove convergence:
 
-### 1. Interactive Visualizer (`interactive_session.py`)
+### Interactive Visualizer (`interactive_session.py`)
 After running a full league simulation (Option 2) or a match simulation (Option 1), the tool offers visualization options. **All plots are automatically saved to the `plots/` directory.**
 
 #### A. League Position Heatmap
@@ -78,11 +78,7 @@ A histogram showing the range of points a specific team scored across the 10,000
 #### C. Match Convergence Plot
 When simulating a specific match, you can generate a convergence plot to see how the win probability stabilizes as $N \rightarrow 10,000$.
 
-![Convergence Plot Example](plots/Liverpool_vs_Manchester City_convergence.png)
-
-### 2. Convergence Proof Script (`convergence_check.py`)
-This standalone script runs a specific experiment to demonstrate the Law of Large Numbers. It simulates a single match 10,000 times and plots the running average.
-
+![Points Distribution Example](plots/Liverpool_vs_ManchesterCity_convergence.png)
 ---
 
 ## 📂 Project Structure
