@@ -69,19 +69,16 @@ After running a full league simulation (Option 2) or a match simulation (Option 
 A color-coded matrix showing the probability of every team finishing in every position (1-20). This provides a much richer understanding than just "Average Points."
 
 ![League Heatmap Example](plots/league_heatmap.png)
-*(Run Option 2 in the CLI to generate this image)*
 
 #### B. Points Distribution Histogram
 A histogram showing the range of points a specific team scored across the 10,000 simulations, including the 95% Confidence Interval.
 
 ![Points Distribution Example](plots/Liverpool_points_dist.png)
-*(Run Option 2, then Select Team in the CLI to generate this image)*
 
 #### C. Match Convergence Plot
 When simulating a specific match, you can generate a convergence plot to see how the win probability stabilizes as $N \rightarrow 10,000$.
 
-![Convergence Plot Example](plots/Liverpool_convergence.png)
-*(Run Option 1 in the CLI to generate this image)*
+![Convergence Plot Example](plots/Liverpool_vs_Manchester City_convergence.png)
 
 ### 2. Convergence Proof Script (`convergence_check.py`)
 This standalone script runs a specific experiment to demonstrate the Law of Large Numbers. It simulates a single match 10,000 times and plots the running average.
