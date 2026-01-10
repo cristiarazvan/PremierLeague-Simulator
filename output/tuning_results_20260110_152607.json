@@ -1,0 +1,189 @@
+{
+  "best_config": {
+    "sigma": 0.23,
+    "scaling_factor": 593,
+    "home_adv": 1.243,
+    "att_def": 0.017,
+    "mid_att": 0.788,
+    "mid_def": 0.436,
+    "def_att": 0.493,
+    "gls_weight": 3.192,
+    "ast_weight": 5.316,
+    "xg_weight": 14.444,
+    "xag_weight": 14.876,
+    "prg_weight": 0.191
+  },
+  "best_error": 279.47296986000003,
+  "history_top_10": [
+    {
+      "config": {
+        "sigma": 0.23,
+        "scaling_factor": 593,
+        "home_adv": 1.243,
+        "att_def": 0.017,
+        "mid_att": 0.788,
+        "mid_def": 0.436,
+        "def_att": 0.493,
+        "gls_weight": 3.192,
+        "ast_weight": 5.316,
+        "xg_weight": 14.444,
+        "xag_weight": 14.876,
+        "prg_weight": 0.191
+      },
+      "error": 279.47296986000003
+    },
+    {
+      "config": {
+        "sigma": 0.23,
+        "scaling_factor": 593,
+        "home_adv": 1.29,
+        "att_def": 0.455,
+        "mid_att": 0.87,
+        "mid_def": 0.714,
+        "def_att": 0.401,
+        "gls_weight": 6.633,
+        "ast_weight": 5.316,
+        "xg_weight": 17.751,
+        "xag_weight": 7.158,
+        "prg_weight": 0.191
+      },
+      "error": 294.2554702699999
+    },
+    {
+      "config": {
+        "sigma": 0.23,
+        "scaling_factor": 593,
+        "home_adv": 1.182,
+        "att_def": 0.061,
+        "mid_att": 0.66,
+        "mid_def": 0.494,
+        "def_att": 0.07,
+        "gls_weight": 2.033,
+        "ast_weight": 4.116,
+        "xg_weight": 19.592,
+        "xag_weight": 14.876,
+        "prg_weight": 0.191
+      },
+      "error": 307.5520644
+    },
+    {
+      "config": {
+        "sigma": 0.114,
+        "scaling_factor": 779,
+        "home_adv": 1.205,
+        "att_def": 0.017,
+        "mid_att": 0.885,
+        "mid_def": 0.463,
+        "def_att": 0.401,
+        "gls_weight": 3.192,
+        "ast_weight": 1.318,
+        "xg_weight": 11.504,
+        "xag_weight": 7.158,
+        "prg_weight": 0.279
+      },
+      "error": 310.84403781000003
+    },
+    {
+      "config": {
+        "sigma": 0.162,
+        "scaling_factor": 1082,
+        "home_adv": 1.091,
+        "att_def": 0.248,
+        "mid_att": 0.731,
+        "mid_def": 0.436,
+        "def_att": 0.493,
+        "gls_weight": 6.241,
+        "ast_weight": 4.116,
+        "xg_weight": 11.504,
+        "xag_weight": 13.551,
+        "prg_weight": 0.336
+      },
+      "error": 314.8364530700001
+    },
+    {
+      "config": {
+        "sigma": 0.23,
+        "scaling_factor": 867,
+        "home_adv": 1.132,
+        "att_def": 0.455,
+        "mid_att": 0.87,
+        "mid_def": 0.714,
+        "def_att": 0.493,
+        "gls_weight": 6.633,
+        "ast_weight": 2.654,
+        "xg_weight": 19.592,
+        "xag_weight": 14.876,
+        "prg_weight": 0.191
+      },
+      "error": 321.5799164800001
+    },
+    {
+      "config": {
+        "sigma": 0.23,
+        "scaling_factor": 779,
+        "home_adv": 1.02,
+        "att_def": 0.455,
+        "mid_att": 0.699,
+        "mid_def": 0.761,
+        "def_att": 0.07,
+        "gls_weight": 6.241,
+        "ast_weight": 5.316,
+        "xg_weight": 17.751,
+        "xag_weight": 5.508,
+        "prg_weight": 0.336
+      },
+      "error": 335.57917588000004
+    },
+    {
+      "config": {
+        "sigma": 0.262,
+        "scaling_factor": 867,
+        "home_adv": 1.091,
+        "att_def": 0.455,
+        "mid_att": 0.87,
+        "mid_def": 0.436,
+        "def_att": 0.493,
+        "gls_weight": 6.628,
+        "ast_weight": 2.654,
+        "xg_weight": 19.592,
+        "xag_weight": 15.455,
+        "prg_weight": 0.191
+      },
+      "error": 338.5143561499999
+    },
+    {
+      "config": {
+        "sigma": 0.162,
+        "scaling_factor": 1084,
+        "home_adv": 1.051,
+        "att_def": 0.129,
+        "mid_att": 0.847,
+        "mid_def": 0.323,
+        "def_att": 0.493,
+        "gls_weight": 2.444,
+        "ast_weight": 2.654,
+        "xg_weight": 14.444,
+        "xag_weight": 13.551,
+        "prg_weight": 0.279
+      },
+      "error": 342.86472283000006
+    },
+    {
+      "config": {
+        "sigma": 0.114,
+        "scaling_factor": 779,
+        "home_adv": 1.182,
+        "att_def": 0.455,
+        "mid_att": 0.556,
+        "mid_def": 0.436,
+        "def_att": 0.493,
+        "gls_weight": 2.444,
+        "ast_weight": 5.316,
+        "xg_weight": 16.226,
+        "xag_weight": 13.551,
+        "prg_weight": 0.191
+      },
+      "error": 348.2865871899999
+    }
+  ]
+}

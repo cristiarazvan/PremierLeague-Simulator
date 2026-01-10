@@ -15,7 +15,18 @@ def simplify_position(pos_str):
     }
     return mapping.get(primary_pos, 'UNK')
 
-def calculate_player_metrics(row):
+DEFAULT_METRIC_WEIGHTS = {
+    'gls': 4,
+    'ast': 3,
+    'xg': 15,
+    'xag': 15,
+    'prg': 0.2,
+}
+
+def calculate_player_metrics(row, metric_weights=None):
+    if metric_weights is None:
+        metric_weights = DEFAULT_METRIC_WEIGHTS
+
     gls = row.get('Gls', 0)
     ast = row.get('Ast', 0)
     xg = row.get('xG', 0)
@@ -28,11 +39,13 @@ def calculate_player_metrics(row):
     prg_p = row.get('PrgP', 0)
     prg_r = row.get('PrgR', 0)
 
-    # Weighted sum
-    raw_att = (gls * 4) + (ast * 3) + (xg * 15) + (xag * 15)
-    
+    # Weighted sum with configurable weights
+    w = metric_weights
+    raw_att = (gls * w.get('gls', 4)) + (ast * w.get('ast', 3)) + (xg * w.get('xg', 15)) + (xag * w.get('xag', 15))
+
     # Adding progression contributions
-    raw_att += (prg_c * 0.2) + (prg_p * 0.2) + (prg_r * 0.2)
+    prg_weight = w.get('prg', 0.2)
+    raw_att += (prg_c * prg_weight) + (prg_p * prg_weight) + (prg_r * prg_weight)
 
     skill_att = round(raw_att, 1)
 
@@ -44,7 +57,6 @@ def calculate_player_metrics(row):
     if pos == 'GK':
         skill_gk = round(starts * 3 + (mins / 30), 1)
     else:
-
         # random for non gk
         skill_gk = np.random.uniform(0, 0.1)
 

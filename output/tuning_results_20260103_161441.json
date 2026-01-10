@@ -1,0 +1,248 @@
+{
+  "best_params": {
+    "sigma": 0.15,
+    "scaling_factor": 1200,
+    "home_adv": 1.15,
+    "gk_multiplier": 4.0,
+    "mid_att_weight": 0.6,
+    "mid_def_weight": 0.7,
+    "xg_weight": 18,
+    "xag_weight": 15,
+    "league_avg_goals": 1.6394736842105264,
+    "att_att_weight": 1.0,
+    "att_def_weight": 0.15,
+    "def_att_weight": 0.1,
+    "def_def_weight": 1.0,
+    "gls_weight": 4,
+    "ast_weight": 3,
+    "prg_weight": 0.2,
+    "def_starts_weight": 2.0,
+    "def_mins_divisor": 45,
+    "gk_starts_weight": 3.0,
+    "gk_mins_divisor": 30
+  },
+  "top_10_results": [
+    {
+      "params": {
+        "sigma": 0.15,
+        "scaling_factor": 1200,
+        "home_adv": 1.15,
+        "gk_multiplier": 4.0,
+        "mid_att_weight": 0.6,
+        "mid_def_weight": 0.7,
+        "xg_weight": 18,
+        "xag_weight": 15
+      },
+      "metrics": {
+        "points_mse": 59.443999999999996,
+        "points_mae": 5.690000000000001,
+        "rank_spearman": 0.9093644870242439,
+        "rank_kendall": 0.7757282939050968,
+        "top4_accuracy": 0.75,
+        "relegation_accuracy": 1.0,
+        "goals_mse": 173.39700000000002,
+        "combined_score": 23.95862051903024
+      }
+    },
+    {
+      "params": {
+        "sigma": 0.18,
+        "scaling_factor": 1200,
+        "home_adv": 1.12,
+        "gk_multiplier": 3.0,
+        "mid_att_weight": 0.6,
+        "mid_def_weight": 0.5,
+        "xg_weight": 18,
+        "xag_weight": 18
+      },
+      "metrics": {
+        "points_mse": 58.72399999999999,
+        "points_mae": 5.88,
+        "rank_spearman": 0.9037593984962405,
+        "rank_kendall": 0.7263157894736842,
+        "top4_accuracy": 0.75,
+        "relegation_accuracy": 1.0,
+        "goals_mse": 958.5385000000002,
+        "combined_score": 23.966824060150376
+      }
+    },
+    {
+      "params": {
+        "sigma": 0.18,
+        "scaling_factor": 1200,
+        "home_adv": 1.15,
+        "gk_multiplier": 3.5,
+        "mid_att_weight": 0.8,
+        "mid_def_weight": 0.6,
+        "xg_weight": 18,
+        "xag_weight": 12
+      },
+      "metrics": {
+        "points_mse": 62.16899999999998,
+        "points_mae": 6.470000000000001,
+        "rank_spearman": 0.8905604240171257,
+        "rank_kendall": 0.7124035352189665,
+        "top4_accuracy": 0.75,
+        "relegation_accuracy": 1.0,
+        "goals_mse": 580.9715,
+        "combined_score": 25.528283039314967
+      }
+    },
+    {
+      "params": {
+        "sigma": 0.12,
+        "scaling_factor": 1200,
+        "home_adv": 1.12,
+        "gk_multiplier": 3.0,
+        "mid_att_weight": 0.8,
+        "mid_def_weight": 0.6,
+        "xg_weight": 15,
+        "xag_weight": 12
+      },
+      "metrics": {
+        "points_mse": 60.69100000000001,
+        "points_mae": 6.5,
+        "rank_spearman": 0.8736842105263156,
+        "rank_kendall": 0.7052631578947369,
+        "top4_accuracy": 0.75,
+        "relegation_accuracy": 1.0,
+        "goals_mse": 281.92500000000007,
+        "combined_score": 25.75993157894738
+      }
+    },
+    {
+      "params": {
+        "sigma": 0.12,
+        "scaling_factor": 1200,
+        "home_adv": 1.12,
+        "gk_multiplier": 3.0,
+        "mid_att_weight": 0.6,
+        "mid_def_weight": 0.5,
+        "xg_weight": 18,
+        "xag_weight": 18
+      },
+      "metrics": {
+        "points_mse": 64.61100000000002,
+        "points_mae": 6.67,
+        "rank_spearman": 0.8935690740982646,
+        "rank_kendall": 0.7229576616666549,
+        "top4_accuracy": 0.75,
+        "relegation_accuracy": 1.0,
+        "goals_mse": 871.3730000000002,
+        "combined_score": 26.14053703606942
+      }
+    },
+    {
+      "params": {
+        "sigma": 0.12,
+        "scaling_factor": 1200,
+        "home_adv": 1.18,
+        "gk_multiplier": 3.5,
+        "mid_att_weight": 0.6,
+        "mid_def_weight": 0.5,
+        "xg_weight": 15,
+        "xag_weight": 12
+      },
+      "metrics": {
+        "points_mse": 64.61749999999999,
+        "points_mae": 5.764999999999999,
+        "rank_spearman": 0.8920647490576952,
+        "rank_kendall": 0.7335117881143434,
+        "top4_accuracy": 0.75,
+        "relegation_accuracy": 1.0,
+        "goals_mse": 129.084,
+        "combined_score": 26.20266003769219
+      }
+    },
+    {
+      "params": {
+        "sigma": 0.18,
+        "scaling_factor": 1200,
+        "home_adv": 1.18,
+        "gk_multiplier": 4.0,
+        "mid_att_weight": 0.8,
+        "mid_def_weight": 0.7,
+        "xg_weight": 18,
+        "xag_weight": 12
+      },
+      "metrics": {
+        "points_mse": 65.8015,
+        "points_mae": 6.3549999999999995,
+        "rank_spearman": 0.8939054449267035,
+        "rank_kendall": 0.7301689506741269,
+        "top4_accuracy": 0.75,
+        "relegation_accuracy": 1.0,
+        "goals_mse": 311.3069999999999,
+        "combined_score": 26.484232202931857
+      }
+    },
+    {
+      "params": {
+        "sigma": 0.12,
+        "scaling_factor": 1200,
+        "home_adv": 1.15,
+        "gk_multiplier": 3.0,
+        "mid_att_weight": 0.7,
+        "mid_def_weight": 0.7,
+        "xg_weight": 18,
+        "xag_weight": 18
+      },
+      "metrics": {
+        "points_mse": 60.51400000000001,
+        "points_mae": 6.15,
+        "rank_spearman": 0.8468202612753679,
+        "rank_kendall": 0.6843718011233453,
+        "top4_accuracy": 0.75,
+        "relegation_accuracy": 1.0,
+        "goals_mse": 901.7810000000003,
+        "combined_score": 26.78138954898529
+      }
+    },
+    {
+      "params": {
+        "sigma": 0.18,
+        "scaling_factor": 1200,
+        "home_adv": 1.15,
+        "gk_multiplier": 4.0,
+        "mid_att_weight": 0.6,
+        "mid_def_weight": 0.5,
+        "xg_weight": 15,
+        "xag_weight": 15
+      },
+      "metrics": {
+        "points_mse": 66.70899999999999,
+        "points_mae": 6.179999999999999,
+        "rank_spearman": 0.8732606860505767,
+        "rank_kendall": 0.7018494087712781,
+        "top4_accuracy": 0.75,
+        "relegation_accuracy": 1.0,
+        "goals_mse": 152.2335,
+        "combined_score": 27.58227255797693
+      }
+    },
+    {
+      "params": {
+        "sigma": 0.15,
+        "scaling_factor": 1200,
+        "home_adv": 1.15,
+        "gk_multiplier": 3.5,
+        "mid_att_weight": 0.7,
+        "mid_def_weight": 0.5,
+        "xg_weight": 15,
+        "xag_weight": 18
+      },
+      "metrics": {
+        "points_mse": 69.834,
+        "points_mae": 6.3,
+        "rank_spearman": 0.8958255616591188,
+        "rank_kendall": 0.7229576616666549,
+        "top4_accuracy": 0.75,
+        "relegation_accuracy": 1.0,
+        "goals_mse": 524.0345,
+        "combined_score": 27.61717753363525
+      }
+    }
+  ],
+  "total_combinations_tested": 500,
+  "timestamp": "2026-01-03T16:14:41.643298"
+}
