@@ -1,4 +1,7 @@
 import sys
+import glob
+import json
+import os
 import numpy as np
 import pandas as pd
 from src.data_loader import load_players_from_csv, load_teams_from_csv
@@ -10,10 +13,11 @@ from src.visualizer import plot_league_heatmap, plot_points_distribution, plot_c
 PLAYER_CSV = 'data/raw/player_stats_2024-25.csv'
 TEAM_CSV = 'data/raw/team_stats_2024-25.csv'
 
+# Default Parameters
 SIM_PARAMS = {
     'sigma': 0.15,
     'scaling_factor': 1500,
-    'league_avg_goals': 1.6,
+    'league_avg_goals': 1.6395,
     'home_adv': 1.0,
     'weights': {
         'ATT': {'att': 1.0, 'def': 0.15},
@@ -23,6 +27,50 @@ SIM_PARAMS = {
         'UNK': {'att': 0.5, 'def': 0.5}
     }
 }
+
+# --- Load Optimized Parameters ---
+def load_optimized_params():
+    try:
+        # Find latest tuning file
+        list_of_files = glob.glob('output/tuning_results_*.json')
+        if not list_of_files:
+            print("[INFO] No tuning results found. Using default parameters.")
+            return
+
+        latest_file = max(list_of_files, key=os.path.getctime)
+        print(f"[INFO] Loading optimized parameters from: {latest_file}")
+
+        with open(latest_file, 'r') as f:
+            data = json.load(f)
+            config = data.get('best_config', {})
+        
+        if not config:
+            print("[WARN] 'best_config' not found in file. Using defaults.")
+            return
+
+        # Update SIM_PARAMS structure
+        SIM_PARAMS['sigma'] = config.get('sigma', SIM_PARAMS['sigma'])
+        SIM_PARAMS['scaling_factor'] = config.get('scaling_factor', SIM_PARAMS['scaling_factor'])
+        SIM_PARAMS['home_adv'] = config.get('home_adv', SIM_PARAMS['home_adv'])
+        
+        # Position weights
+        SIM_PARAMS['weights']['ATT']['def'] = config.get('att_def', SIM_PARAMS['weights']['ATT']['def'])
+        SIM_PARAMS['weights']['MID']['att'] = config.get('mid_att', SIM_PARAMS['weights']['MID']['att'])
+        SIM_PARAMS['weights']['MID']['def'] = config.get('mid_def', SIM_PARAMS['weights']['MID']['def'])
+        SIM_PARAMS['weights']['DEF']['att'] = config.get('def_att', SIM_PARAMS['weights']['DEF']['att'])
+        
+        print("[SUCCESS] Optimized parameters applied.")
+        print("-" * 40)
+        for k, v in config.items():
+            print(f"  {k}: {v}")
+        print("-" * 40)
+
+    except Exception as e:
+        print(f"[ERROR] Failed to load optimized parameters: {e}")
+        print("Using default parameters.")
+
+# Execute load
+load_optimized_params()
 
 class PremierLeagueCLI:
     def __init__(self):
