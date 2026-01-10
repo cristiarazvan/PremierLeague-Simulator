@@ -24,18 +24,23 @@ class Team:
         self.squad_pool[player.name] = player
 
     def get_default_11(self):
-        """
-        Best 11 based on minutes played.
-        """
         all_players = list(self.squad_pool.values())
+        all_players.sort(key=lambda p: p.minutes_played, reverse=True)
         
-        gks = [p for p in all_players if p.position == 'GK']
-        top_gk = sorted(gks, key=lambda p: p.minutes_played, reverse=True)[:1]
+        gk = [p for p in all_players if p.position == 'GK'][:1]
+        defs = [p for p in all_players if p.position == 'DEF'][:4]
+        mids = [p for p in all_players if p.position == 'MID'][:3]
+        atts = [p for p in all_players if p.position == 'ATT'][:3]
         
-        outfield = [p for p in all_players if p.position != 'GK']
-        top_10 = sorted(outfield, key=lambda p: p.minutes_played, reverse=True)[:10]
+        lineup = gk + defs + mids + atts
         
-        return top_gk + top_10
+        if len(lineup) < 11:
+            used_names = {p.name for p in lineup}
+            needed = 11 - len(lineup)
+            fillers = [p for p in all_players if p.name not in used_names][:needed]
+            lineup.extend(fillers)
+            
+        return lineup
 
     def calculate_power(self, params, specific_lineup_names=None):
         """

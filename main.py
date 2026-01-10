@@ -34,8 +34,11 @@ def Monte_Carlo_Match(h_team, a_team, league, sim_params):
 
     print(f"Running {num_sims} simulations...")
 
+    h_att, h_def = league.teams[h_team].calculate_power(sim_params)
+    a_att, a_def = league.teams[a_team].calculate_power(sim_params)
+
     for _ in range(num_sims):
-        gh, ga = league.simulate_match(h_team, a_team, sim_params)
+        gh, ga = league.simulate_match_fast(h_att, h_def, a_att, a_def, sim_params)
 
         if gh > ga:
             wins_h += 1
@@ -53,12 +56,11 @@ def Monte_Carlo_Match(h_team, a_team, league, sim_params):
 def Monte_Carlo_League(league, sim_params, lineups = None):
     if lineups is None:
         lineups = {}
-        for team in league.teams:
+    
+    # Ensure all teams are in lineups dict even if None
+    for team in league.teams:
+        if team not in lineups:
             lineups[team] = None
-    else:
-        for team in league.teams:
-            if team not in lineups:
-                lineups[team] = None
 
     Rankings = {}
     for team in league.teams:
@@ -67,6 +69,11 @@ def Monte_Carlo_League(league, sim_params, lineups = None):
             Rankings[team][place] = 0
         Rankings[team]["goals_per_match"] = 0
         Rankings[team]["points"] = 0
+
+    # Pre-calculate powers for all teams
+    team_powers = {}
+    for team_name in league.teams:
+        team_powers[team_name] = league.teams[team_name].calculate_power(sim_params, lineups[team_name])
 
     num_sims = 2000
     for _ in range(num_sims):
@@ -81,8 +88,11 @@ def Monte_Carlo_League(league, sim_params, lineups = None):
             for team2 in league.teams:
                 if team1 == team2:
                     continue
+                
+                t1_att, t1_def = team_powers[team1]
+                t2_att, t2_def = team_powers[team2]
 
-                gh, ga = league.simulate_match(team1, team2, sim_params, lineups[team1], lineups[team2])
+                gh, ga = league.simulate_match_fast(t1_att, t1_def, t2_att, t2_def, sim_params)
                 Goals[team1] += gh
                 Goals[team2] += ga
 

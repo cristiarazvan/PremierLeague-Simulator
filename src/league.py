@@ -76,42 +76,37 @@ class League:
 
         return lambda_home, lambda_away
 
-    def simulate_match(self, home_name, away_name, params, home_lineup=None, away_lineup=None):
-        """
-        match simulation using Monte Carlo approach.
-        """
-        if home_name not in self.teams or away_name not in self.teams:
-            return 0, 0
-
-        home_team = self.teams[home_name]
-        away_team = self.teams[away_name]
-
-        # 1. Base Power
-        attack_home, defense_home = home_team.calculate_power(params, home_lineup)
-        attack_away, defense_away = away_team.calculate_power(params, away_lineup)
-
-        # 2. White Noise (Luck/Form on the day)
+    def simulate_match_fast(self, h_att, h_def, a_att, a_def, params):
         sigma = params.get('sigma', 0.1)
         noise_home = np.random.normal(0, sigma)
         noise_away = np.random.normal(0, sigma)
 
-        # 3. Moment Power (Power on the specific matchday)
-        moment_att_home = attack_home * (1 + noise_home)
-        moment_def_home = defense_home * (1 + noise_home)
+        moment_att_home = h_att * (1 + noise_home)
+        moment_def_home = h_def * (1 + noise_home)
 
-        moment_att_away = attack_away * (1 + noise_away)
-        moment_def_away = defense_away * (1 + noise_away)
+        moment_att_away = a_att * (1 + noise_away)
+        moment_def_away = a_def * (1 + noise_away)
 
-        # 4. Expected Goals (Poisson Lambda)
         scaling_factor = params.get('scaling_factor', 250)
         avg_goals = params.get('league_avg_goals', 1.6)
         home_adv = params.get('home_adv', 1.15)
 
         lambda_home = avg_goals * np.exp((moment_att_home - moment_def_away) / scaling_factor) * home_adv
-        
         lambda_away = avg_goals * np.exp((moment_att_away - moment_def_home) / scaling_factor) * (1/home_adv)
 
         score_home = np.random.poisson(lambda_home)
         score_away = np.random.poisson(lambda_away)
 
         return score_home, score_away
+
+    def simulate_match(self, home_name, away_name, params, home_lineup=None, away_lineup=None):
+        if home_name not in self.teams or away_name not in self.teams:
+            return 0, 0
+
+        home_team = self.teams[home_name]
+        away_team = self.teams[away_name]
+
+        attack_home, defense_home = home_team.calculate_power(params, home_lineup)
+        attack_away, defense_away = away_team.calculate_power(params, away_lineup)
+
+        return self.simulate_match_fast(attack_home, defense_home, attack_away, defense_away, params)
