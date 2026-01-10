@@ -26,7 +26,7 @@ sim_params = {
 def Monte_Carlo_Match(h_team, a_team, league, sim_params):
     print("\n--- Monte Carlo Simulation (" + h_team + " vs " + a_team + ") ---")
 
-    num_sims = 2000
+    num_sims = 10000
 
     wins_h = 0
     wins_a = 0
@@ -75,7 +75,7 @@ def Monte_Carlo_League(league, sim_params, lineups = None):
     for team_name in league.teams:
         team_powers[team_name] = league.teams[team_name].calculate_power(sim_params, lineups[team_name])
 
-    num_sims = 2000
+    num_sims = 10000
     for _ in range(num_sims):
         Goals = {}
         Points = {}

@@ -86,7 +86,7 @@ class PremierLeagueCLI:
         a_att, a_def = self.league.teams[a_team].calculate_power(SIM_PARAMS, a_names)
 
         wins_h, wins_a, draws = 0, 0, 0
-        num_sims = 2000
+        num_sims = 10000
 
         for _ in range(num_sims):
             gh, ga = self.league.simulate_match_fast(h_att, h_def, a_att, a_def, SIM_PARAMS)
@@ -112,7 +112,7 @@ class PremierLeagueCLI:
         # Storage for results
         table = {name: {'Points': 0, 'GF': 0, 'GA': 0} for name in self.league.teams}
         
-        num_sims = 1000 # Keeping it snappy
+        num_sims = 10000 # Keeping it snappy
         print(f"Running {num_sims} simulations of the entire season...")
 
         for _ in range(num_sims):
