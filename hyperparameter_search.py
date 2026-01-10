@@ -235,30 +235,6 @@ class NumpyEncoder(json.JSONEncoder):
         if isinstance(obj, np.ndarray): return obj.tolist()
         return super().default(obj)
 
-def main():
-    optimizer = LeagueOptimizer(PLAYER_CSV, GROUND_TRUTH)
-    print("Parameter Pools Generated.")
-    print("-" * 30)
-
-    # Example: 1000 trials, 100 sims each
-    best_config, best_error, history = optimizer.search_parallel(n_trials=500, sims_per_trial=100)
-
-    print("\n" + "="*30)
-    print(f"SEARCH COMPLETE. Best MSE: {best_error:.2f}")
-    print("="*30)
-    print("Best Configuration:")
-    print(json.dumps(best_config, indent=2, cls=NumpyEncoder))
-    
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    with open(f"{OUTPUT_DIR}/tuning_results_{timestamp}.json", 'w') as f:
-        json.dump({'best_config': best_config, 'best_error': best_error, 
-                   'history_top_10': sorted(history, key=lambda x: x['error'])[:10]}, 
-                  f, indent=2, cls=NumpyEncoder)
-
-
-if __name__ == "__main__":
-    main()
-
 class NumpyEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, np.integer):
@@ -279,7 +255,7 @@ def main():
     print("-" * 30)
 
     # Increased sims/trial because it's faster now
-    best_config, best_error, history = optimizer.search_parallel(n_trials=500, sims_per_trial=10000)
+    best_config, best_error, history = optimizer.search_parallel(n_trials=5000, sims_per_trial=10000)
 
     print("\n" + "="*30)
     print(f"SEARCH COMPLETE. Best MSE: {best_error:.2f}")
